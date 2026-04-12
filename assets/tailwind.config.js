@@ -15,7 +15,28 @@ module.exports = {
     extend: {
       colors: {
         brand: "#FD4F00",
-      }
+      },
+      fontSize: {
+        'fluid-xs': 'clamp(0.75rem, 0.69rem + 0.3vw, 0.875rem)',
+        'fluid-sm': 'clamp(0.875rem, 0.81rem + 0.33vw, 1rem)',
+        'fluid-base': 'clamp(1rem, 0.94rem + 0.33vw, 1.125rem)',
+        'fluid-lg': 'clamp(1.125rem, 1.06rem + 0.33vw, 1.25rem)',
+        'fluid-xl': 'clamp(1.25rem, 1.19rem + 0.33vw, 1.5rem)',
+        'fluid-2xl': 'clamp(1.5rem, 1.38rem + 0.66vw, 1.875rem)',
+        'fluid-3xl': 'clamp(1.875rem, 1.69rem + 0.98vw, 2.25rem)',
+      },
+      spacing: {
+        'fluid-1': 'clamp(0.25rem, 0.19rem + 0.33vw, 0.5rem)',
+        'fluid-2': 'clamp(0.5rem, 0.38rem + 0.66vw, 0.75rem)',
+        'fluid-3': 'clamp(0.75rem, 0.56rem + 0.98vw, 1rem)',
+        'fluid-4': 'clamp(1rem, 0.75rem + 1.31vw, 1.25rem)',
+        'fluid-5': 'clamp(1.25rem, 0.94rem + 1.64vw, 1.5rem)',
+        'fluid-6': 'clamp(1.5rem, 1.13rem + 1.97vw, 2rem)',
+        'fluid-8': 'clamp(2rem, 1.5rem + 2.62vw, 2.5rem)',
+      },
+      borderRadius: {
+        'fluid': 'clamp(0.5rem, 0.38rem + 0.66vw, 1rem)',
+      },
     },
   },
   plugins: [

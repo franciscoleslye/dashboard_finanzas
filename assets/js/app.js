@@ -53,6 +53,49 @@ let liveSocket = new LiveSocket("/live", Socket, {
           });
         });
       }
+    },
+    UfChartHover: {
+      mounted() {
+        const points = JSON.parse(this.el.dataset.points || "[]");
+        const dates = JSON.parse(this.el.dataset.dates || "[]");
+        const values = JSON.parse(this.el.dataset.values || "[]");
+        const tooltip = document.getElementById("uf-tooltip");
+        const tooltipValue = document.getElementById("uf-tooltip-value");
+        const tooltipDate = document.getElementById("uf-tooltip-date");
+        
+        this.el.addEventListener("mousemove", (e) => {
+          const svg = this.el.querySelector("svg");
+          if (!svg || points.length === 0) return;
+          
+          const rect = svg.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          
+          let closestIdx = 0;
+          let minDist = Infinity;
+          points.forEach((p, i) => {
+            const dist = Math.abs(p.x - x);
+            if (dist < minDist) {
+              minDist = dist;
+              closestIdx = i;
+            }
+          });
+          
+          if (minDist < 10) {
+            tooltip.classList.remove("hidden");
+            tooltip.style.left = `${points[closestIdx].x}%`;
+            tooltip.style.top = `${points[closestIdx].y / 65 * 100}%`;
+            
+            tooltipValue.textContent = `$${Math.round(values[closestIdx]).toLocaleString()}`;
+            tooltipDate.textContent = dates[closestIdx] || "";
+          } else {
+            tooltip.classList.add("hidden");
+          }
+        });
+        
+        this.el.addEventListener("mouseleave", () => {
+          tooltip.classList.add("hidden");
+        });
+      }
     }
   }
 })

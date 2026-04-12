@@ -3,3 +3,9 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+
+@layer base {
+  html {
+    font-size: clamp(0.75rem, 0.7rem + 0.25vw, 1.125rem);
+  }
+}

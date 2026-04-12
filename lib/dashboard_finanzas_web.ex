@@ -92,6 +92,7 @@ defmodule DashboardFinanzasWeb do
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
+      alias Jason, as: JSON
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())

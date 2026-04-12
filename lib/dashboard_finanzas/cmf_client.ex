@@ -1,7 +1,7 @@
 defmodule DashboardFinanzas.CmfClient do
   require Logger
 
-  @api_key "a48b40e69d075d6b88b7343cd0dc057317e2ff5b"
+  
   @base_url "https://api.cmfchile.cl/api-sbifv3/recursos_api"
 
   def obtener_indicadores_completos() do

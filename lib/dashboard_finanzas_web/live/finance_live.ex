@@ -36,7 +36,7 @@ defmodule DashboardFinanzasWeb.FinanceLive do
        utm: data.utm,
        ipc: data.ipc,
        uf_history: uf_history,
-       uf_range: 30,
+       uf_range: 365,
        banks: sort_banks_by_score(banks),
        selected_bank: if(banks != [], do: hd(sort_banks_by_score(banks)), else: nil),
        refreshing: false,
@@ -131,24 +131,24 @@ defmodule DashboardFinanzasWeb.FinanceLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 p-4 overflow-x-hidden">
+    <div class="min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 p-fluid-4 overflow-x-hidden">
       <div class="w-full max-w-[1920px] mx-auto">
-        <div class="flex justify-between items-center mb-6">
+        <div class="flex justify-between items-center mb-fluid-6">
           <div class="text-center flex-1">
             <div class="flex items-center justify-center gap-3 mb-2">
-              <div class="w-12 h-12 bg-sky-600 rounded-xl flex items-center justify-center">
+              <div class="w-12 h-12 bg-sky-600 rounded-fluid flex items-center justify-center">
                 <.icon name="hero-chart-bar-solid" class="w-7 h-7 text-white" />
               </div>
-              <h1 class="text-3xl font-bold text-white tracking-tight">Chilehoy.org</h1>
+              <h1 class="text-fluid-3xl font-bold text-white tracking-tight">Chilehoy.org</h1>
             </div>
-            <p class="text-sky-300 text-sm">
+            <p class="text-fluid-sm text-sky-300">
               Indicadores Económicos y Estadísticas Bancarias de Chile
             </p>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
-          <div class="xl:col-span-1 space-y-6 overflow-y-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-fluid-6 mb-fluid-8">
+          <div class="lg:col-span-1 space-y-6">
             <.section_title title="Indicadores Monetarios" />
             <.error_banner :if={@indicators_error} message={@indicators_error} />
             <.error_banner :if={@history_error} message={@history_error} />
@@ -162,7 +162,7 @@ defmodule DashboardFinanzasWeb.FinanceLive do
             <.chart_placeholder uf_history={@uf_history} uf_range={@uf_range} />
             <.bank_detail_section banks={@banks} selected_bank={@selected_bank} />
           </div>
-          <div class="xl:col-span-2">
+          <div class="lg:col-span-2">
             <.section_title title="Sistema Bancario - Resumen Comparativo" />
             <.error_banner :if={@bank_error} message={@bank_error} />
             <.bank_comparison_section banks={@banks} loading={@loading_banks} />
@@ -177,10 +177,10 @@ defmodule DashboardFinanzasWeb.FinanceLive do
 
   defp section_title(assigns) do
     ~H"""
-    <div class="flex items-center gap-3 mb-4 mt-8">
+    <div class="flex items-center gap-3 mb-fluid-4 mt-fluid-8">
       <div class="h-px flex-1 bg-gradient-to-r from-transparent via-[#52307E]/50 to-transparent">
       </div>
-      <h2 class="text-lg font-semibold text-white/80 uppercase tracking-wider">{@title}</h2>
+      <h2 class="text-fluid-lg font-semibold text-white/80 uppercase tracking-wider">{@title}</h2>
       <div class="h-px flex-1 bg-gradient-to-r from-transparent via-[#52307E]/50 to-transparent">
       </div>
     </div>
@@ -256,7 +256,7 @@ defmodule DashboardFinanzasWeb.FinanceLive do
 
   defp indicator_card(assigns) do
     ~H"""
-    <div class={"relative overflow-hidden rounded-2xl p-6 shadow-lg backdrop-blur-xl #{color_class(@color)}"}>
+    <div class={"relative overflow-hidden rounded-2xl p-fluid-6 shadow-lg backdrop-blur-xl #{color_class(@color)}"}>
       <div class="absolute top-0 right-0 w-24 h-24 opacity-10 transform translate-x-6 -translate-y-6">
         <.icon name={@icon} class="w-full h-full" />
       </div>
@@ -266,18 +266,18 @@ defmodule DashboardFinanzasWeb.FinanceLive do
             <.icon name={@icon} class={"w-4 h-4 #{icon_text_class(@color)}"} />
           </div>
           <div>
-            <p class={"text-xs font-semibold uppercase tracking-wider #{text_secondary_class(@color)}"}>
+            <p class={"text-fluid-xs font-semibold uppercase tracking-wider #{text_secondary_class(@color)}"}>
               {@symbol}
             </p>
-            <p class="text-sm font-medium text-white/80">{@label}</p>
+            <p class="text-fluid-sm font-medium text-white/80">{@label}</p>
           </div>
         </div>
         <div class="flex items-end justify-between">
           <div>
-            <p class="text-3xl font-bold text-white tracking-tight">
+            <p class="text-fluid-2xl font-bold text-white tracking-tight">
               {if @suffix == "$", do: "$"}{format_number(@value)}{if @suffix == "%", do: "%"}
             </p>
-            <p class="text-xs text-white/50 mt-1">
+            <p class="text-fluid-xs text-white/50 mt-1">
               {if @symbol in ~w[USD EUR], do: format_date_today(), else: format_date(@date)}
             </p>
           </div>
@@ -292,24 +292,24 @@ defmodule DashboardFinanzasWeb.FinanceLive do
 
   defp trend_summary(assigns) do
     ~H"""
-    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-700 p-6 shadow-lg">
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-700 p-fluid-6 shadow-lg">
       <div class="absolute top-0 right-0 w-32 h-32 opacity-10 transform translate-x-8 -translate-y-8">
         <.icon name="hero-sparkles" class="w-full h-full text-white" />
       </div>
       <div class="relative">
-        <p class="text-indigo-200 text-xs font-semibold uppercase tracking-wider mb-3">
+        <p class="text-indigo-200 text-fluid-xs font-semibold uppercase tracking-wider mb-3">
           Resumen del Día
         </p>
         <div class="space-y-3">
           <div class="flex items-center justify-between">
-            <span class="text-white/70 text-sm">UF vs Dólar</span>
+            <span class="text-white/70 text-fluid-sm">UF vs Dólar</span>
             <span class="text-white font-semibold">
               {calculate_ratio(@uf.valor, @dolar.valor)} UF/USD
             </span>
           </div>
           <div class="h-px bg-white/10"></div>
-          <div class="flex items-center justify-between">
-            <span class="text-white/70 text-sm">Fecha actual</span>
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-1 md:gap-0">
+            <span class="text-white/70 text-fluid-sm">Fecha actual</span>
             <span class="text-white font-semibold">{format_date_today()}</span>
           </div>
         </div>
@@ -441,12 +441,12 @@ defmodule DashboardFinanzasWeb.FinanceLive do
 
   defp bank_selector(assigns) do
     ~H"""
-    <div class="flex flex-wrap gap-2 mb-4">
+    <div class="flex flex-wrap gap-1.5 mb-4">
       <%= for bank <- @banks do %>
         <button
           phx-click="select_bank"
           phx-value-code={bank.code}
-          class={"px-4 py-2 rounded-lg text-sm font-medium transition-all #{if @selected_bank && @selected_bank.code == bank.code, do: "bg-sky-500 text-white", else: "bg-white/10 text-white/70 hover:bg-white/20"}"}
+          class={"px-2 py-1.5 rounded-lg text-xs font-medium transition-all whitespace-nowrap #{if @selected_bank && @selected_bank.code == bank.code, do: "bg-sky-500 text-white", else: "bg-white/10 text-white/70 hover:bg-white/20"}"}
         >
           {format_bank_name(bank.name)}
         </button>
@@ -489,13 +489,13 @@ defmodule DashboardFinanzasWeb.FinanceLive do
           <div class="space-y-1">
             <div>
               <p class="text-white/60 text-[10px]">Activos</p>
-              <p class="text-[10px] md:text-xs lg:text-sm font-bold text-white whitespace-nowrap overflow-x-auto">
+              <p class="text-[9px] md:text-[10px] lg:text-xs font-bold text-white">
                 {if @bank.balance, do: "$#{format_full(@bank.balance.activos)}", else: "-"}
               </p>
             </div>
             <div>
               <p class="text-white/60 text-[10px]">Pasivos</p>
-              <p class="text-[10px] md:text-xs lg:text-sm font-bold text-white whitespace-nowrap overflow-x-auto">
+              <p class="text-[9px] md:text-[10px] lg:text-xs font-bold text-white">
                 {if @bank.balance, do: "$#{format_full(@bank.balance.pasivos)}", else: "-"}
               </p>
             </div>
@@ -509,13 +509,13 @@ defmodule DashboardFinanzasWeb.FinanceLive do
           <div class="grid grid-cols-1 gap-1">
             <div>
               <p class="text-white/60 text-[10px]">Ingresos</p>
-              <p class="text-[10px] md:text-xs lg:text-sm font-bold text-white whitespace-nowrap overflow-x-auto">
+              <p class="text-[9px] md:text-[10px] lg:text-xs font-bold text-white">
                 {if @bank.resultados, do: "$#{format_full(@bank.resultados.ingresos)}", else: "-"}
               </p>
             </div>
             <div>
               <p class="text-white/60 text-[10px]">Gastos</p>
-              <p class="text-[10px] md:text-xs lg:text-sm font-bold text-white whitespace-nowrap overflow-x-auto">
+              <p class="text-[9px] md:text-[10px] lg:text-xs font-bold text-white">
                 {if @bank.resultados, do: "-$#{format_full_abs(@bank.resultados.gastos)}", else: "-"}
               </p>
             </div>
@@ -526,7 +526,7 @@ defmodule DashboardFinanzasWeb.FinanceLive do
           <p class="text-emerald-300 text-[10px] md:text-xs font-medium uppercase tracking-wider mb-1">
             Resultado Neto
           </p>
-          <p class={"text-sm md:text-base lg:text-lg font-bold #{@resultado_color} whitespace-nowrap overflow-x-auto"}>
+          <p class={"text-xs md:text-sm lg:text-base font-bold #{@resultado_color}"}>
             {if @bank.resultados, do: "$ #{format_full(@bank.resultados.resultado)}", else: "-"}
           </p>
         </div>
@@ -577,6 +577,8 @@ defmodule DashboardFinanzasWeb.FinanceLive do
         %{
           points: points_str,
           data_points: points,
+          data_dates: Enum.map(points, fn {_, _, _, date} -> date end),
+          data_values: Enum.map(points, fn {_, _, valor, _} -> Decimal.to_float(valor) end),
           min_val: Decimal.new("#{min_val}"),
           max_val: Decimal.new("#{max_val}"),
           range: Decimal.new("#{range}"),
@@ -595,30 +597,37 @@ defmodule DashboardFinanzasWeb.FinanceLive do
       |> assign(:uf_svg, svg_data)
 
     ~H"""
-    <div class="bg-white/5 backdrop-blur-xl rounded-2xl p-6 mb-8 border border-white/10">
-      <div class="flex items-center justify-between mb-6">
+    <div class="bg-white/5 backdrop-blur-xl rounded-2xl p-fluid-6 mb-fluid-8 border border-white/10">
+      <div class="flex items-center justify-between mb-fluid-6">
         <div>
-          <h3 class="text-white font-semibold text-lg">Historial UF</h3>
+          <h3 class="text-white font-semibold text-fluid-lg">Historial UF</h3>
         </div>
         <div class="flex gap-2">
           <button
             phx-click="set_uf_range"
             phx-value-range="30"
-            class={"px-3 py-1.5 text-sm rounded-lg transition #{if @uf_range == 30, do: "bg-sky-500 text-white", else: "bg-white/10 text-white/70 hover:bg-white/20"}"}
+            class={"px-3 py-1.5 text-fluid-sm rounded-lg transition #{if @uf_range == 30, do: "bg-sky-500 text-white", else: "bg-white/10 text-white/70 hover:bg-white/20"}"}
           >
             30D
           </button>
           <button
             phx-click="set_uf_range"
             phx-value-range="365"
-            class={"px-3 py-1.5 text-sm rounded-lg transition #{if @uf_range == 365, do: "bg-sky-500 text-white", else: "bg-white/10 text-white/70 hover:bg-white/20"}"}
+            class={"px-3 py-1.5 text-fluid-sm rounded-lg transition #{if @uf_range == 365, do: "bg-sky-500 text-white", else: "bg-white/10 text-white/70 hover:bg-white/20"}"}
           >
             1A
           </button>
         </div>
       </div>
       <%= if @uf_svg do %>
-        <div class="relative group" id="uf-chart">
+        <div
+          class="relative group"
+          id="uf-chart"
+          phx-hook="UfChartHover"
+          data-points={encode_uf_data(@uf_svg.data_points)}
+          data-dates={encode_uf_dates(@uf_svg.data_dates)}
+          data-values={encode_uf_values(@uf_svg.data_values)}
+        >
           <svg viewBox="0 0 100 65" class="w-full h-24" preserveAspectRatio="none">
             <defs>
               <linearGradient id="ufGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -666,6 +675,14 @@ defmodule DashboardFinanzasWeb.FinanceLive do
               fill="#22d3ee"
             />
           </svg>
+
+          <div
+            class="absolute hidden pointer-events-none bg-black/90 text-white text-xs rounded-lg px-3 py-2 -top-12 left-1/2 -translate-x-1/2 z-50 shadow-xl border border-white/20"
+            id="uf-tooltip"
+          >
+            <div class="font-semibold" id="uf-tooltip-value"></div>
+            <div class="text-white/60 text-[10px]" id="uf-tooltip-date"></div>
+          </div>
 
           <div class="flex justify-between mt-2 text-xs text-white/50 px-1">
             <span>{@uf_svg.first_date}</span>
@@ -951,4 +968,26 @@ defmodule DashboardFinanzasWeb.FinanceLive do
       _ -> fallback
     end
   end
+
+  defp encode_uf_data(data_points) when is_list(data_points) do
+    data_points
+    |> Enum.map(fn {x, y, _valor, _fecha} -> %{x: x, y: y} end)
+    |> JSON.encode!()
+  end
+
+  defp encode_uf_data(_), do: "[]"
+
+  defp encode_uf_dates(data_dates) when is_list(data_dates) do
+    data_dates
+    |> Enum.map(&to_string/1)
+    |> JSON.encode!()
+  end
+
+  defp encode_uf_dates(_), do: "[]"
+
+  defp encode_uf_values(data_values) when is_list(data_values) do
+    JSON.encode!(data_values)
+  end
+
+  defp encode_uf_values(_), do: "[]"
 end
