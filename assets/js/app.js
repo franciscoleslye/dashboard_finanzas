@@ -1,0 +1,73 @@
+// If you want to use Phoenix channels, run `mix help phx.gen.channel`
+// to get started and then uncomment the line below.
+// import "./user_socket.js"
+
+// You can include dependencies in two ways.
+//
+// The simplest option is to put them in assets/vendor and
+// import them using relative paths:
+//
+//     import "../vendor/some-package.js"
+//
+// Alternatively, you can `npm install some-package --prefix assets` and import
+// them using a path starting with the package name:
+//
+//     import "some-package"
+//
+
+// Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
+import "phoenix_html"
+// Establish Phoenix Socket and LiveView configuration.
+import {Socket} from "phoenix"
+import {LiveSocket} from "phoenix_live_view"
+import topbar from "../vendor/topbar"
+
+let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
+let liveSocket = new LiveSocket("/live", Socket, {
+  longPollFallbackMs: 2500,
+  params: {_csrf_token: csrfToken},
+  hooks: {
+    UFCardChart: {
+      mounted() {
+        this.el.addEventListener("mousemove", (e) => {
+          const svg = this.el.querySelector("svg");
+          if (!svg) return;
+          
+          const rect = svg.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          
+          const circles = this.el.querySelectorAll("circle[data-x]");
+          circles.forEach(circle => {
+            const cx = parseFloat(circle.dataset.x);
+            const isNear = Math.abs(cx - x) < 8;
+            circle.setAttribute("r", isNear ? "3" : "1.5");
+            circle.style.fill = isNear ? "#fff" : "#22d3ee";
+          });
+        });
+        
+        this.el.addEventListener("mouseleave", () => {
+          const circles = this.el.querySelectorAll("circle[data-x]");
+          circles.forEach(circle => {
+            circle.setAttribute("r", "1.5");
+            circle.style.fill = "#22d3ee";
+          });
+        });
+      }
+    }
+  }
+})
+
+// Show progress bar on live navigation and form submits
+topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
+window.addEventListener("phx:page-loading-start", _info => topbar.show(300))
+window.addEventListener("phx:page-loading-stop", _info => topbar.hide())
+
+// connect if there are any LiveViews on the page
+liveSocket.connect()
+
+// expose liveSocket on window for web console debug logs and latency simulation:
+// >> liveSocket.enableDebug()
+// >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
+// >> liveSocket.disableLatencySim()
+window.liveSocket = liveSocket
+

@@ -1,0 +1,10 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: dashboard_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Brunito2024
+      - POSTGRES_DB=dashboard_finanzas_dev
+    ports:
+      - "5432:5432"
