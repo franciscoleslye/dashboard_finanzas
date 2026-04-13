@@ -171,52 +171,6 @@ defmodule DashboardFinanzas.CmfClient do
     end
   end
 
-  defp fetch_indicator_with_date_fallback(path, xml_tag) do
-    today = Date.utc_today()
-    dates = for offset <- -1..-30//-1, do: Date.add(today, offset)
-    today_result = fetch_indicator_with_date(path, xml_tag, format_date(today))
-
-    if is_tuple(today_result) && elem(today_result, 0) == :ok do
-      today_result
-    else
-      find_in_dates(path, xml_tag, dates)
-    end
-  end
-
-  defp find_in_dates(_path, _xml_tag, []), do: {:error, "No data available"}
-
-  defp find_in_dates(path, xml_tag, [date | rest]) do
-    case fetch_indicator_with_date(path, xml_tag, format_date(date)) do
-      {:ok, _} = result -> result
-      _ -> find_in_dates(path, xml_tag, rest)
-    end
-  end
-
-  defp format_date(date) do
-    "#{String.pad_leading(Integer.to_string(date.day), 2, "0")}-#{String.pad_leading(Integer.to_string(date.month), 2, "0")}-#{date.year}"
-  end
-
-  defp fetch_indicator_with_date(path, xml_tag, fecha) do
-    url = "#{@base_url}#{path}/#{fecha}"
-    query_params = [apikey: @api_key]
-
-    headers = %{
-      "user-agent" => "Mozilla/5.0",
-      "accept" => "application/xml"
-    }
-
-    case Req.get(url, params: query_params, headers: headers) do
-      {:ok, %{status: 200, body: body}} ->
-        parse_xml_response(body, xml_tag)
-
-      {:ok, %{status: status}} ->
-        {:error, "Status #{status}"}
-
-      {:error, reason} ->
-        {:error, reason}
-    end
-  end
-
   defp parse_xml_response(body, xml_tag) do
     fecha_pattern = ~r/<#{xml_tag}>.*?<Fecha>([^<]+)<\/Fecha>/
     valor_pattern = ~r/<#{xml_tag}>.*?<Valor>([^<]+)<\/Valor>/
